@@ -126,7 +126,19 @@ class _NotePageState extends State<NotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // App Bar
-      appBar: AppBar(title: const Text("Notes")),
+      appBar: AppBar(
+        title: const Text(
+          "Notes",
+          style: TextStyle(
+            fontWeight: FontWeight.bold, // Tebal
+            fontSize: 26, // Ukuran font
+            color: Color.fromARGB(255, 0, 0, 0), // Warna tulisan
+            letterSpacing: 2, // Jarak antar huruf
+          ),
+        ),
+        centerTitle: true,
+      ),
+      backgroundColor: const Color.fromARGB(255, 144, 188, 223),
       // Button
       floatingActionButton: FloatingActionButton(
         onPressed: addNewNote,
