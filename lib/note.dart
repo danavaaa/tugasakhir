@@ -1,8 +1,9 @@
 class Note {
   int? id;
   String content;
+  bool isDone;
 
-  Note({this.id, required this.content});
+  Note({this.id, required this.content, this.isDone = false});
 
   /*
 
@@ -22,11 +23,19 @@ Note(
 
   //map -> note
   factory Note.fromMap(Map<String, dynamic> map) {
-    return Note(id: map['id'] as int, content: map['content'] as String);
+    return Note(
+      id: map['id'] as int,
+      content: map['content'] as String,
+      isDone: map['is_done'] == true,
+    );
   }
 
   // note -> map
   Map<String, dynamic> toMap() {
-    return {'content': content};
+    final map = <String, dynamic>{'content': content, 'is_done': isDone};
+    if (id != null) {
+      map['id'] = id;
+    }
+    return map;
   }
 }

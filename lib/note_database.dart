@@ -17,12 +17,23 @@ class NoteDatabase {
       .map((data) => data.map((noteMap) => Note.fromMap(noteMap)).toList());
 
   // update
-  Future updateNote(Note oldNote, String newContent) async {
-    await database.update({'content': newContent}).eq('id', oldNote.id!);
+  Future<void> updateNote(Note note) async {
+    await Supabase.instance.client
+        .from('notes')
+        .update(note.toMap())
+        .eq('id', note.id!);
   }
 
   //delete
   Future deleteNote(Note note) async {
     await database.delete().eq('id', note.id!);
+  }
+
+  // update note status
+  Future<void> updateNoteStatus(Note note, bool isDone) async {
+    await Supabase.instance.client
+        .from('notes')
+        .update({'is_done': isDone})
+        .eq('id', note.id!);
   }
 }

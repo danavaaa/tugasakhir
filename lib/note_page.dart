@@ -16,7 +16,7 @@ class _NotePageState extends State<NotePage> {
   //text controller
   final noteControllerr = TextEditingController();
 
-  // user wants to add new note
+  // jika user ingin menambahkan catatan baru
   void addNewNote() {
     showDialog(
       context: context,
@@ -37,9 +37,9 @@ class _NotePageState extends State<NotePage> {
               // save button
               TextButton(
                 onPressed: () {
-                  //create a new note
+                  //buat note baru
                   final newNote = Note(content: noteControllerr.text);
-                  // save in db
+                  // save database
                   notesDatabase.createNote(newNote);
 
                   Navigator.pop(context);
@@ -52,7 +52,7 @@ class _NotePageState extends State<NotePage> {
     );
   }
 
-  // user wants to update note
+  // jika user ingin mengupdate catatan
   void updateNote(Note note) {
     // pre-fill text controller with existing note
     noteControllerr.text = note.content;
@@ -75,8 +75,10 @@ class _NotePageState extends State<NotePage> {
               // save button
               TextButton(
                 onPressed: () {
-                  // save in db
-                  notesDatabase.updateNote(note, noteControllerr.text);
+                  // update isi catatan
+                  note.content = noteControllerr.text;
+                  // simpan perubahan di database
+                  notesDatabase.updateNote(note);
 
                   Navigator.pop(context);
                   noteControllerr.clear();
@@ -88,7 +90,7 @@ class _NotePageState extends State<NotePage> {
     );
   }
 
-  // user wants to delete note
+  // jika user ingin menghapus catatan
   void deleteNote(Note note) {
     showDialog(
       context: context,
@@ -120,7 +122,8 @@ class _NotePageState extends State<NotePage> {
           ),
     );
   }
-  //BUILD UI
+
+  //Desain tampilan halaman
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +131,7 @@ class _NotePageState extends State<NotePage> {
       // App Bar
       appBar: AppBar(
         title: const Text(
-          "Notes",
+          "Keep Notes",
           style: TextStyle(
             fontWeight: FontWeight.bold, // Tebal
             fontSize: 26, // Ukuran font
@@ -169,16 +172,32 @@ class _NotePageState extends State<NotePage> {
 
               //list tile UI
               return ListTile(
-                title: Text(note.content),
+                leading: Checkbox(
+                  value: note.isDone,
+                  onChanged: (value) {
+                    setState(() {
+                      note.isDone = value!;
+                    });
+                    //update the note in the database
+                    notesDatabase.updateNoteStatus(note, value!);
+                  },
+                ),
+                title: Text(
+                  note.content,
+                  style: TextStyle(
+                    decoration: note.isDone ? TextDecoration.lineThrough : null,
+                  ),
+                ),
                 trailing: SizedBox(
                   width: 100,
                   child: Row(
                     children: [
-                      //update button
+                      // update button
                       IconButton(
                         onPressed: () => updateNote(note),
                         icon: const Icon(Icons.edit),
                       ),
+
                       //delete button
                       IconButton(
                         onPressed: () => deleteNote(note),
