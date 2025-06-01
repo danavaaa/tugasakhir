@@ -163,6 +163,12 @@ class _NotePageState extends State<NotePage> {
           //loaded!
           final notes = snapshot.data!;
 
+          // Urutan List
+          notes.sort((a, b) {
+            if (a.isDone == b.isDone) return 0;
+            return a.isDone ? 1 : -1;
+          });
+
           // list of notes UI
           return ListView.builder(
             itemCount: notes.length,
@@ -194,7 +200,7 @@ class _NotePageState extends State<NotePage> {
                     children: [
                       // update button
                       IconButton(
-                        onPressed: () => updateNote(note),
+                        onPressed: note.isDone ? null : () => updateNote(note),
                         icon: const Icon(Icons.edit),
                       ),
 
