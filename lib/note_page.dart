@@ -24,7 +24,7 @@ class _NotePageState extends State<NotePage> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("New Note"),
+            title: const Text("New List"),
             content: TextField(controller: noteControllerr),
             actions: [
               // cancel button
@@ -62,7 +62,7 @@ class _NotePageState extends State<NotePage> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("Update Note"),
+            title: const Text("Update List"),
             content: TextField(controller: noteControllerr),
             actions: [
               // cancel button
@@ -98,7 +98,7 @@ class _NotePageState extends State<NotePage> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("Delete Note?"),
+            title: const Text("Delete List?"),
             actions: [
               // cancel button
               TextButton(
@@ -132,9 +132,9 @@ class _NotePageState extends State<NotePage> {
     return Scaffold(
       // App Bar
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 232, 220, 229),
+        backgroundColor: const Color(0xFFF3E5F5),
         title: const Text(
-          "Keep Notes",
+          "All Notes",
           style: TextStyle(
             fontWeight: FontWeight.bold, // Tebal
             fontSize: 26, // Ukuran font
@@ -144,12 +144,7 @@ class _NotePageState extends State<NotePage> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: const Color.fromARGB(
-        255,
-        232,
-        220,
-        229,
-      ), // warna latar belakang
+      backgroundColor: const Color(0xFFF3E5F5), // warna latar belakang
       // Button
       floatingActionButton: FloatingActionButton(
         onPressed: addNewNote,
@@ -185,10 +180,7 @@ class _NotePageState extends State<NotePage> {
                   return const Center(
                     child: Text(
                       "No Notes Yet",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Color.fromARGB(255, 220, 205, 213),
-                      ),
+                      style: TextStyle(fontSize: 24, color: Colors.grey),
                     ),
                   );
                 }
