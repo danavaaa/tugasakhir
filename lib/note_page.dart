@@ -175,6 +175,16 @@ class _NotePageState extends State<NotePage> {
                   return a.isDone ? 1 : -1;
                 });
 
+                // jika tidak ada catatan
+                if (notes.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "No Notes Yet",
+                      style: TextStyle(fontSize: 24, color: Colors.grey),
+                    ),
+                  );
+                }
+
                 // hitung jumlah selesai dan total catatan
                 final completed = notes.where((note) => !note.isDone).length;
                 final total = notes.length;

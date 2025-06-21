@@ -20,7 +20,7 @@ class TaskCategoryCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color.fromARGB(255, 216, 192, 214),
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
