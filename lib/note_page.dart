@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:notes/note.dart';
 import 'package:notes/note_database.dart';
+import 'widgets/task_category_card.dart';
 
 class NotePage extends StatefulWidget {
-  const NotePage({super.key});
+  // ignore: use_super_parameters
+  const NotePage({Key? key}) : super(key: key);
 
   @override
   State<NotePage> createState() => _NotePageState();
@@ -130,6 +132,7 @@ class _NotePageState extends State<NotePage> {
     return Scaffold(
       // App Bar
       appBar: AppBar(
+        backgroundColor: const Color(0xFFF3E5F5),
         title: const Text(
           "Keep Notes",
           style: TextStyle(
@@ -141,7 +144,7 @@ class _NotePageState extends State<NotePage> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: const Color.fromARGB(255, 144, 188, 223),
+      backgroundColor: const Color(0xFFF3E5F5), // warna latar belakang
       // Button
       floatingActionButton: FloatingActionButton(
         onPressed: addNewNote,
@@ -149,73 +152,102 @@ class _NotePageState extends State<NotePage> {
       ),
 
       // Body -> Stream Builder
-      body: StreamBuilder(
-        // Listens to this stream..
-        stream: notesDatabase.stream,
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder(
+              // Listens to this stream..
+              stream: notesDatabase.stream,
 
-        // to build our UI..
-        builder: (context, snapshot) {
-          //loading
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+              // to build our UI..
+              builder: (context, snapshot) {
+                //loading
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          //loaded!
-          final notes = snapshot.data!;
+                //loaded!
+                final notes = snapshot.data!;
 
-          // Urutan List
-          notes.sort((a, b) {
-            if (a.isDone == b.isDone) return 0;
-            return a.isDone ? 1 : -1;
-          });
+                // Urutan List
+                notes.sort((a, b) {
+                  if (a.isDone == b.isDone) return 0;
+                  return a.isDone ? 1 : -1;
+                });
 
-          // list of notes UI
-          return ListView.builder(
-            itemCount: notes.length,
-            itemBuilder: (context, index) {
-              //get each note
-              final note = notes[index];
+                // hitung jumlah selesai dan total catatan
+                final completed = notes.where((note) => !note.isDone).length;
+                final total = notes.length;
 
-              //list tile UI
-              return ListTile(
-                leading: Checkbox(
-                  value: note.isDone,
-                  onChanged: (value) {
-                    setState(() {
-                      note.isDone = value!;
-                    });
-                    //update the note in the database
-                    notesDatabase.updateNoteStatus(note, value!);
-                  },
-                ),
-                title: Text(
-                  note.content,
-                  style: TextStyle(
-                    decoration: note.isDone ? TextDecoration.lineThrough : null,
-                  ),
-                ),
-                trailing: SizedBox(
-                  width: 100,
-                  child: Row(
-                    children: [
-                      // update button
-                      IconButton(
-                        onPressed: note.isDone ? null : () => updateNote(note),
-                        icon: const Icon(Icons.edit),
+                return Column(
+                  children: [
+                    // card UI
+                    TaskCategoryCard(
+                      title: "To Do List",
+                      completed: completed,
+                      total: total,
+                    ),
+                    const SizedBox(height: 16), // jarak antar card dan list
+                    // list of notes UI
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: notes.length,
+                        itemBuilder: (context, index) {
+                          //get each note
+                          final note = notes[index];
+
+                          //list tile UI
+                          return ListTile(
+                            leading: Checkbox(
+                              value: note.isDone,
+                              onChanged: (value) {
+                                setState(() {
+                                  note.isDone = value!;
+                                });
+                                //update the note in the database
+                                notesDatabase.updateNoteStatus(note, value!);
+                              },
+                            ),
+                            title: Text(
+                              note.content,
+                              style: TextStyle(
+                                decoration:
+                                    note.isDone
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                              ),
+                            ),
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  // update button
+                                  IconButton(
+                                    onPressed:
+                                        note.isDone
+                                            ? null
+                                            : () => updateNote(note),
+                                    icon: const Icon(Icons.edit),
+                                  ),
+
+                                  //delete button
+                                  IconButton(
+                                    onPressed: () => deleteNote(note),
+                                    icon: const Icon(Icons.delete),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
-
-                      //delete button
-                      IconButton(
-                        onPressed: () => deleteNote(note),
-                        icon: const Icon(Icons.delete),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notes/note_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'onboarding_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,9 +17,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: NotePage(),
+      title: 'todo app',
+      home:
+          const OnboardingPage(), // selalu tampilkan onboarding page terlebih dahulu
     );
   }
 }
