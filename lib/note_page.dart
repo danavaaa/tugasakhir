@@ -132,7 +132,7 @@ class _NotePageState extends State<NotePage> {
     return Scaffold(
       // App Bar
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF3E5F5),
+        backgroundColor: const Color.fromARGB(255, 232, 220, 229),
         title: const Text(
           "Keep Notes",
           style: TextStyle(
@@ -144,7 +144,12 @@ class _NotePageState extends State<NotePage> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: const Color(0xFFF3E5F5), // warna latar belakang
+      backgroundColor: const Color.fromARGB(
+        255,
+        232,
+        220,
+        229,
+      ), // warna latar belakang
       // Button
       floatingActionButton: FloatingActionButton(
         onPressed: addNewNote,
@@ -180,7 +185,10 @@ class _NotePageState extends State<NotePage> {
                   return const Center(
                     child: Text(
                       "No Notes Yet",
-                      style: TextStyle(fontSize: 24, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Color.fromARGB(255, 220, 205, 213),
+                      ),
                     ),
                   );
                 }
